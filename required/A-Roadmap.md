@@ -38,10 +38,10 @@ Menyiapkan project Laravel.
 
 ## Task
 - [ ✅ ] Install Laravel
-- [ ] Setup Git Repository
-- [ ] Setup MySQL
-- [ ] Konfigurasi .env
-- [ ] Install Tailwind CSS
+- [ ✅] Setup Git Repository
+- [✅ ] Setup MySQL
+- [✅ ] Konfigurasi .env
+- [✅ ] Install Tailwind CSS
 - [ ] Install Laravel Breeze
 - [ ] Menjalankan Migration bawaan Laravel
 

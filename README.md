@@ -1,58 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CrePlann — Weekly Planner
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.icons8.com/doodle/96/000000/todo-list.png" alt="Doodle Planner" />
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>CrePlann</strong> adalah aplikasi web untuk mengatur jadwal mingguan, todo, dan catatan pribadi menggunakan Laravel.
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🎯 Ringkasan Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+CrePlann dibuat untuk membantu pengguna:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Mengelola jadwal mingguan (`schedules`)
+- Menyusun daftar tugas harian (`todos`)
+- Menyimpan catatan dengan kategori (`notes`, `categories`)
+- Melihat ringkasan aktivitas pada dashboard
+- Menjaga semua data tetap privat untuk setiap pengguna
 
-## Learning Laravel
+## 🧩 Fitur Utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Autentikasi pengguna dengan Laravel Breeze
+- CRUD untuk `schedules`, `todos`, `notes`, dan `categories`
+- Relasi data user-private antara user, schedule, todo, category, dan note
+- API endpoint untuk mengakses data pengguna
+- Basis data MySQL / SQLite siap pakai sesuai konfigurasi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Teknologi
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Backend: Laravel 12 / 13
+- Frontend: Blade + Tailwind CSS
+- Database: MySQL (default) / SQLite
+- Authentication: Laravel Breeze
 
-## Agentic Development
+## 📚 Struktur Database
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Tabel inti:
 
-```bash
-composer require laravel/boost --dev
+- `users`
+  - `id`, `name`, `email`, `password`, `avatar`, `google_id`, timestamps
+- `schedules`
+  - `id`, `user_id`, `title`, `description`, `date`, `start_time`, `end_time`, `priority`, `color`, timestamps
+- `todos`
+  - `id`, `user_id`, `schedule_id`, `title`, `completed`, `due_date`, timestamps
+- `categories`
+  - `id`, `user_id`, `name`, `color`, timestamps
+- `notes`
+  - `id`, `user_id`, `category_id`, `title`, `content`, timestamps
 
-php artisan boost:install
+## 🔗 Relasi Data
+
+- `User` hasMany `schedules`, `todos`, `categories`, `notes`
+- `Category` hasMany `notes`
+- `Schedule` hasMany `todos` (opsional)
+- `Todo` belongsTo `user` dan `schedule`
+- `Note` belongsTo `user` dan `category`
+
+## 🚀 API Endpoint User
+
+Endpoint CRUD user saat ini:
+
+- `GET /api/users` — daftar semua user
+- `GET /api/users/{id}` — ambil satu user berdasarkan ID
+- `POST /api/users` — buat user baru
+- `PUT /api/users/{id}` — perbarui user
+- `DELETE /api/users/{id}` — hapus user
+
+Contoh `POST /api/users` request body:
+
+```json
+{
+  "name": "Admin",
+  "email": "admin@example.com",
+  "password": "password123"
+}
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## ⚙️ Setup Lokal
 
-## Contributing
+1. Salin file environment:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+2. Install dependensi:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+npm install
+```
 
-## Security Vulnerabilities
+3. Generate application key:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+4. Jalankan migrasi database:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate
+```
+
+5. Jalankan server lokal:
+
+```bash
+php artisan serve
+```
+
+## ✔️ Catatan
+
+- Semua data disimpan secara pribadi per akun.
+- Pastikan `SESSION_DRIVER` sesuai dengan kebutuhan (database atau file).
+- Jika ingin menambah Google Login, integrasikan `Laravel Socialite`.
+
+## 📎 Referensi
+
+Dokumen perencanaan sumber ada di folder `required/`, khususnya:
+
+- `required/A-ProjectSpec.md`
+- `required/B-Concept.md`
+
+---
+
+<p align="center">
+  <img src="https://img.icons8.com/doodle/48/000000/idea.png" alt="Doodle Idea" />
+  <em>CrePlann — rencana mingguan yang lebih mudah dan lebih visual.</em>
+</p>
