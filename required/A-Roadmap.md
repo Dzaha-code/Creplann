@@ -37,13 +37,13 @@ Merancang aplikasi sebelum mulai coding.
 Menyiapkan project Laravel.
 
 ## Task
-- [ ✅ ] Install Laravel
-- [ ✅] Setup Git Repository
+- [✅ ] Install Laravel
+- [✅] Setup Git Repository
 - [✅ ] Setup MySQL
 - [✅ ] Konfigurasi .env
 - [✅ ] Install Tailwind CSS
-- [ ] Install Laravel Breeze
-- [ ] Menjalankan Migration bawaan Laravel
+- [✅ ] Install Laravel Breeze
+- [✅ ] Menjalankan Migration bawaan Laravel
 
 ## Output Minimal
 - Laravel berjalan
