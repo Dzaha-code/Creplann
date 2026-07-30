@@ -37,7 +37,7 @@ Merancang aplikasi sebelum mulai coding.
 Menyiapkan project Laravel.
 
 ## Task
-- [✅ ] Install Laravel
+- [ ✅ ] Install Laravel
 - [✅] Setup Git Repository
 - [✅ ] Setup MySQL
 - [✅ ] Konfigurasi .env
@@ -59,16 +59,16 @@ Menyiapkan project Laravel.
 Membuat kerangka tampilan aplikasi.
 
 ## Task
-- [ ] Membuat Navbar
-- [ ] Membuat Sidebar
+- [✅ ] Membuat Navbar
+- [✅ ] Membuat Sidebar
 - [ ] Membuat Dashboard Layout
-- [ ] Membuat Footer
+- [✅ ] Membuat Footer
 - [ ] Membuat Responsive Layout
 
 ## Output Minimal
 Halaman memiliki:
 - Dashboard
-- Schedule
+- Schedule 
 - Todo
 - Notes
 - Profile
