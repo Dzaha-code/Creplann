@@ -61,7 +61,7 @@ Membuat kerangka tampilan aplikasi.
 ## Task
 - [✅ ] Membuat Navbar
 - [✅ ] Membuat Sidebar
-- [ ] Membuat Dashboard Layout
+- [   ] Membuat Dashboard Layout
 - [✅ ] Membuat Footer
 - [ ] Membuat Responsive Layout
 

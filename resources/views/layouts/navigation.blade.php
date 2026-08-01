@@ -1,100 +1,81 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
+{{--
+    Navbar kapsul — disimpan terpisah supaya bisa di-@include dari layouts/app.blade.php
+    Sesuaikan nama route di routeIs() dengan route asli project-mu jika berbeda.
+--}}
+<div class="navbar-wrap">
+    <nav class="navbar-capsule">
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
+        <a href="{{ url('/dashboard') }}" class="nav-brand">
+            <svg viewBox="0 0 40 40" fill="none">
+                <path d="M8 12c0-2.2 1.8-4 4-4h16c2.2 0 4 1.8 4 4v18c0 2.2-1.8 4-4 4H12c-2.2 0-4-1.8-4-4V12z" stroke="#241F1A" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M13 5.5v6M27 5.5v6" stroke="#E15B3F" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M13 21l4 4 9-9" stroke="#E15B3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+        <a href="{{ route('dashboard') }}"
+           class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+           @if (request()->routeIs('dashboard')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                <rect x="13" y="3.5" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                <rect x="3.5" y="13" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                <rect x="13" y="13" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="1.7"/>
+            </svg>
+            <span class="label">Dashboard</span>
+        </a>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+        <a href="{{ route('schedule.index') }}"
+           class="nav-item {{ request()->routeIs('schedule*') ? 'active' : '' }}"
+           @if (request()->routeIs('schedule*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3.5" y="4.5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M8 2.8v3.6M16 2.8v3.6M3.5 9.5h17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                <path d="M7.5 13.5h2.4M11.5 13.5h2.4M15.5 13.5h1.2M7.5 17h2.4M11.5 17h2.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="label">Schedule</span>
+        </a>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+        <a href="{{ route('todo.index') }}"
+           class="nav-item {{ request()->routeIs('todo*') ? 'active' : '' }}"
+           @if (request()->routeIs('todo*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M7.5 12l2.6 2.6L16.5 9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="label">Todo</span>
+        </a>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+        <a href="{{ route('note.index') }}"
+           class="nav-item {{ request()->routeIs('note*') ? 'active' : '' }}"
+           @if (request()->routeIs('note*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 3.5h9l3.5 3.5V19a1.6 1.6 0 01-1.6 1.6H6A1.6 1.6 0 014.4 19V5.1A1.6 1.6 0 016 3.5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M15 3.5V7h3.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M8 12h8M8 15.5h5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="label">Notes</span>
+        </a>
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
+        <a href="{{ route('profile.edit') }}"
+           class="nav-item {{ request()->routeIs('profile*') ? 'active' : '' }}"
+           @if (request()->routeIs('profile*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8.3" r="3.6" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M4.8 19.6c1.2-3.4 4-5 7.2-5s6 1.6 7.2 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="label">Profile</span>
+        </a>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
+        <form method="POST" action="{{ route('logout') }}" class="nav-logout-form">
+            @csrf
+            <button type="submit" class="nav-logout" title="Keluar" aria-label="Keluar">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M9 4H6.5A2.5 2.5 0 004 6.5v11A2.5 2.5 0 006.5 20H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    <path d="M20 12H10.5M20 12l-3.5-3.5M20 12l-3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </form>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav>
+    </nav>
+</div>
