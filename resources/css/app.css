@@ -77,7 +77,6 @@ a {
     margin: 0 0 26px;
 }
 
-after
 .wrap {
     max-width: 1080px;
     margin: 0 auto;
@@ -309,6 +308,12 @@ main.page-body {
     padding: 11px 16px;
     border-radius: 12px;
     margin-bottom: 22px;
+}
+
+.status-banner--error {
+    background: rgba(196, 67, 46, 0.1);
+    border-color: rgba(196, 67, 46, 0.3);
+    color: var(--danger);
 }
 
 .back-home {
@@ -618,6 +623,17 @@ main.page-body {
 
 .dashboard-greeting {
     padding: 0 0 30px;
+}
+
+.dashboard-greeting .welcome {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.dashboard-greeting .welcome span {
+    font-size: 1.1rem;
 }
 
 .dashboard-greeting p {

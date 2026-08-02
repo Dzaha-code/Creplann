@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
-    <title>{{ config('app.name', 'CrePlann') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'CrePlann') }}@isset($title) — {{ $title }}@endisset</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,5 +31,6 @@
         {{ $slot }}
     </main>
 
+    @stack('scripts')
 </body>
 </html>

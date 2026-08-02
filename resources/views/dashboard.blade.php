@@ -21,8 +21,8 @@
 <main class="page-body">
 <div class="wrap">
 
-    <div class="greeting">
-        <p style="font-size:1.05rem;color:var(--ink);font-weight:600;">Halo, Dzaha <span style="font-size:1.1rem;">👋</span></p>
+    <div class="dashboard-greeting">
+        <p class="welcome">Halo, Dzaha <span>👋</span></p>
         <p>Jumat, 31 Juli 2026 — semoga pekanmu berjalan sesuai rencana.</p>
     </div>
 
@@ -53,18 +53,18 @@
             <p class="sub">Todo yang sudah kamu selesaikan.</p>
             <div class="progress-track"><div class="progress-fill" style="width:64%;"></div></div>
             <div class="progress-label"><span><strong>64%</strong> selesai</span><span>7/11 tugas</span></div>
-            <div style="margin-top:18px;">
-                <div class="todo-row checked"><span class="checkbox"></span><span class="text">Export model 3D windmill</span></div>
-                <div class="todo-row checked"><span class="checkbox"></span><span class="text">Revisi UI dashboard</span></div>
-                <div class="todo-row"><span class="checkbox"></span><span class="text">Siapkan materi presentasi LKS</span></div>
+            <div class="todo-list" style="margin-top:18px;">
+                <div class="todo-row checked"><span class="checkbox-btn"></span><span class="title">Export model 3D windmill</span></div>
+                <div class="todo-row checked"><span class="checkbox-btn"></span><span class="title">Revisi UI dashboard</span></div>
+                <div class="todo-row"><span class="checkbox-btn"></span><span class="title">Siapkan materi presentasi LKS</span></div>
             </div>
         </div>
 
         <div class="card stat-card">
             <h3><svg viewBox="0 0 24 24" fill="none"><path d="M6 3.5h9l3.5 3.5V19a1.6 1.6 0 01-1.6 1.6H6A1.6 1.6 0 014.4 19V5.1A1.6 1.6 0 016 3.5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M15 3.5V7h3.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> Catatan Terbaru</h3>
             <p class="sub">Yang terakhir kamu tulis.</p>
-            <div class="note-item"><span class="cat">Kuliah</span><h4>Ide fitur kalender bulanan</h4><p>Tambahkan tampilan bulan penuh selain grid mingguan yang sudah ada...</p></div>
-            <div class="note-item"><span class="cat">Pribadi</span><h4>Referensi warna doodle</h4><p>Coral #E15B3F cocok dipasangkan dengan sage #7E9083 untuk aksen kedua...</p></div>
+            <div class="note-card"><span class="cat">Kuliah</span><h4>Ide fitur kalender bulanan</h4><p>Tambahkan tampilan bulan penuh selain grid mingguan yang sudah ada...</p></div>
+            <div class="note-card"><span class="cat">Pribadi</span><h4>Referensi warna doodle</h4><p>Coral #E15B3F cocok dipasangkan dengan sage #7E9083 untuk aksen kedua...</p></div>
         </div>
 
     </div>

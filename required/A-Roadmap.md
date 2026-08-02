@@ -2,251 +2,256 @@
 
 ## 🎯 Project Goal
 Membuat aplikasi Weekly Planner berbasis Laravel yang memiliki fitur:
-- Authentication (Google Login)
+- Authentication
 - Weekly Schedule
 - Daily Todo
 - Notes
 - Dashboard
-- Responsive UI
+- UI yang responsif dan mudah dipakai
 
 ---
 
 # Phase 0 - Planning
 
 ## Tujuan
-Merancang aplikasi sebelum mulai coding.
+Merancang aplikasi sebelum mulai pengembangan.
 
 ## Task
-- [✅] Menentukan fitur utama
-- [✅] Membuat PROJECT_SPEC.md
-- [✅] Membuat Flowchart
-- [ ] Membuat ERD (Entity Relationship Diagram)
-- [ ] Mendesain Wireframe UI
-- [ ] Menentukan warna dan tema aplikasi
+- [x] Menentukan fitur utama
+- [x] Menyusun project specification
+- [x] Menyusun flow aplikasi
+- [ ] Membuat ERD
+- [ ] Mendesain wireframe UI
+- [ ] Menentukan tema visual aplikasi
 
 ## Output Minimal
-- PROJECT_SPEC.md selesai
-- ERD selesai
-- Wireframe Dashboard selesai
+- Spesifikasi proyek selesai
+- Alur aplikasi jelas
+- Struktur fitur utama sudah disepakati
 
 ---
 
 # Phase 1 - Project Setup
 
 ## Tujuan
-Menyiapkan project Laravel.
+Menyiapkan project Laravel secara dasar.
 
 ## Task
-- [ ✅ ] Install Laravel
-- [✅] Setup Git Repository
-- [✅ ] Setup MySQL
-- [✅ ] Konfigurasi .env
-- [✅ ] Install Tailwind CSS
-- [✅ ] Install Laravel Breeze
-- [✅ ] Menjalankan Migration bawaan Laravel
+- [x] Install Laravel
+- [x] Setup Git Repository
+- [x] Setup database MySQL
+- [x] Konfigurasi environment
+- [x] Install Tailwind CSS
+- [x] Install Laravel Breeze
+- [x] Menjalankan migration bawaan Laravel
 
 ## Output Minimal
-- Laravel berjalan
-- Database terkoneksi
-- Login & Register berhasil
-- Dashboard bawaan Laravel tampil
+- Laravel bisa berjalan
+- Database terhubung
+- Login dan register dasar tersedia
 
 ---
 
-# Phase 2 - Layout
+# Phase 2 - Layout & Navigation
 
 ## Tujuan
-Membuat kerangka tampilan aplikasi.
+Membuat kerangka antarmuka aplikasi.
 
 ## Task
-- [✅ ] Membuat Navbar
-- [✅ ] Membuat Sidebar
-- [   ] Membuat Dashboard Layout
-- [✅ ] Membuat Footer
-- [ ] Membuat Responsive Layout
+- [x] Membuat navbar
+- [x] Membuat sidebar
+- [ ] Membuat layout dashboard yang konsisten
+- [x] Membuat footer
+- [ ] Membuat layout responsif untuk mobile
 
 ## Output Minimal
-Halaman memiliki:
-- Dashboard
-- Schedule 
-- Todo
-- Notes
-- Profile
-
-Semua menu sudah bisa dibuka meskipun masih kosong.
+- Halaman utama dan modul utama dapat diakses
+- Navigasi antar fitur berjalan
 
 ---
 
 # Phase 3 - Database Design
 
 ## Tujuan
-Membuat struktur database.
+Membuat struktur data untuk modul utama.
 
 ## Task
-- [ ] Membuat Migration Users (jika diperlukan)
-- [ ] Membuat Migration Schedules
-- [ ] Membuat Migration Todos
-- [ ] Membuat Migration Categories
-- [ ] Membuat Migration Notes
-
-## Relationship
-User
-├── Schedule
-├── Todo
-├── Category
-└── Note
+- [x] Membuat migration users
+- [x] Membuat migration schedules
+- [x] Membuat migration todos
+- [x] Membuat migration categories
+- [x] Membuat migration notes
+- [ ] Menambahkan relasi dan constraint tambahan jika diperlukan
 
 ## Output Minimal
-- Semua migration berhasil
-- Semua foreign key berjalan
-- Semua model dibuat
+- Schema database utama terbentuk
+- Relasi antar tabel berjalan
 
 ---
 
 # Phase 4 - Schedule Module
 
 ## Tujuan
-Membuat CRUD Schedule.
+Membangun fitur jadwal mingguan.
 
 ## Task
-- [ ] Halaman daftar Schedule
-- [ ] Form tambah Schedule
-- [ ] Edit Schedule
-- [ ] Delete Schedule
-- [ ] Validasi Form
-- [ ] Menampilkan Schedule milik user
+- [ ] Halaman daftar schedule
+- [ ] Form tambah schedule
+- [ ] Form edit schedule
+- [ ] Hapus schedule
+- [ ] Validasi input
+- [ ] Menampilkan schedule milik pengguna saja
 
 ## Output Minimal
-User dapat:
-- Membuat Schedule
-- Mengedit Schedule
-- Menghapus Schedule
-- Melihat daftar Schedule
+Pengguna dapat membuat, melihat, mengubah, dan menghapus jadwal.
 
 ---
 
-# Phase 5 - Weekly Planner
+# Phase 5 - Weekly Planner View
 
 ## Tujuan
-Menampilkan Schedule dalam tampilan mingguan.
+Menampilkan schedule dalam tampilan mingguan.
 
 ## Task
-- [ ] Membuat Grid Senin-Minggu
-- [ ] Menampilkan Schedule berdasarkan hari
+- [ ] Membuat tampilan grid mingguan
+- [ ] Menampilkan schedule berdasarkan hari
 - [ ] Menampilkan jam kegiatan
-- [ ] Warna berdasarkan prioritas (opsional)
+- [ ] Menampilkan warna berdasarkan prioritas
 
 ## Output Minimal
-Weekly Planner menampilkan semua jadwal sesuai tanggal.
+Pengguna dapat melihat jadwal dalam format mingguan dengan jelas.
 
 ---
 
 # Phase 6 - Todo Module
 
 ## Tujuan
-Membuat CRUD Todo.
+Membuat fitur todo harian.
 
 ## Task
-- [ ] Daftar Todo
-- [ ] Tambah Todo
-- [ ] Edit Todo
-- [ ] Hapus Todo
-- [ ] Checkbox Completed
-- [ ] Filter Todo Hari Ini
+- [ ] Daftar todo
+- [ ] Tambah todo
+- [ ] Edit todo
+- [ ] Hapus todo
+- [ ] Checkbox completed
+- [ ] Filter todo hari ini atau berdasarkan status
 
 ## Output Minimal
-User dapat mengelola Todo harian.
+Pengguna dapat mengelola todo harian dengan mudah.
 
 ---
 
-# Phase 7 - Schedule Integration
+# Phase 7 - Integration Schedule & Todo
 
 ## Tujuan
-Menghubungkan Schedule dengan Todo.
+Menghubungkan jadwal dengan todo.
 
 ## Task
-- [ ] Tombol Generate Todo
-- [ ] Membuat Todo dari Schedule
-- [ ] Mencegah Todo Duplikat
+- [ ] Tombol generate todo dari schedule
+- [ ] Membuat todo dari schedule
+- [ ] Mencegah duplikasi todo
 
 ## Output Minimal
-Schedule dapat menghasilkan Todo.
+Schedule dapat menjadi sumber pembuatan todo.
 
 ---
 
 # Phase 8 - Notes Module
 
 ## Tujuan
-Membuat fitur catatan.
+Membangun fitur catatan pribadi.
 
 ## Task
-- [ ] CRUD Notes
-- [ ] CRUD Category
-- [ ] Filter berdasarkan Category
-- [ ] Search Notes
+- [ ] CRUD notes
+- [ ] CRUD category
+- [ ] Filter berdasarkan category
+- [ ] Pencarian notes
 
 ## Output Minimal
-User dapat membuat dan mengelola Notes.
+Pengguna dapat membuat dan mengelola catatan dengan kategori.
 
 ---
 
 # Phase 9 - Dashboard
 
 ## Tujuan
-Menampilkan ringkasan aktivitas.
+Menampilkan ringkasan aktivitas pengguna.
 
 ## Task
 - [ ] Today's Schedule
 - [ ] Today's Todo
 - [ ] Recent Notes
-- [ ] Statistik Todo
-- [ ] Greeting User
+- [ ] Statistik todo
+- [ ] Greeting user
 
 ## Output Minimal
-Dashboard menampilkan data pengguna secara dinamis.
+Dashboard memuat ringkasan aktivitas secara dinamis.
 
 ---
 
 # Phase 10 - UI & UX Improvement
 
 ## Tujuan
-Menyempurnakan aplikasi.
+Menyempurnakan pengalaman pengguna.
 
 ## Task
-- [ ] Form Validation
-- [ ] Toast Notification
-- [ ] Loading Indicator
-- [ ] Empty State
-- [ ] Error Page
-- [ ] Responsive Mobile
-- [ ] Dark Mode (Opsional)
-- [ ] Animasi Ringan
+- [ ] Validasi form
+- [ ] Notifikasi toast
+- [ ] Loading state
+- [ ] Empty state
+- [ ] Responsive mobile
+- [ ] Dark mode (opsional)
 
 ## Output Minimal
-Aplikasi nyaman digunakan dan tampil profesional.
+Aplikasi terasa lebih profesional dan nyaman dipakai.
 
 ---
 
 # Phase 11 - Authentication Google
 
 ## Tujuan
-Menggunakan akun Google untuk Login.
+Menambahkan login menggunakan akun Google.
 
 ## Task
 - [ ] Install Laravel Socialite
 - [ ] Konfigurasi Google OAuth
 - [ ] Login Google
-- [ ] Simpan Data User
+- [ ] Menyimpan data user dari Google
 
 ## Output Minimal
-User dapat login menggunakan akun Google.
+Pengguna dapat login dengan akun Google.
 
 ---
 
-# Phase 12 - Deployment
+# Phase 12 - Testing & Security
+
+## Tujuan
+Memastikan aplikasi aman dan stabil.
+
+## Task
+- [ ] Membuat unit dan feature test
+- [ ] Menguji akses antar user
+- [ ] Menguji validasi input dan authorization
+- [ ] Meninjau keamanan route dan policy
+
+## Output Minimal
+Aplikasi siap diuji secara lebih matang sebelum deployment.
+
+---
+
+# Phase 13 - Deployment
 
 ## Tujuan
 Mempublikasikan aplikasi.
+
+## Task
+- [ ] Menyiapkan environment produksi
+- [ ] Menjalankan deployment
+- [ ] Melakukan pengecekan pasca deploy
+
+## Output Minimal
+Aplikasi dapat diakses publik atau internal sesuai kebutuhan.
+
 
 ## Task
 - [ ] Optimasi Laravel

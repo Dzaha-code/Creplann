@@ -2,88 +2,195 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
+use App\Models\Schedule;
+use App\Models\Todo;
+use App\Services\WeeklyGridService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request, WeeklyGridService $weeklyGridService): JsonResponse|View
     {
-        $todos = collect();
+        $query = $request->user()
+            ->todos()
+            ->with('schedule')
+            ->orderBy('due_date')
+            ->orderBy('created_at');
+
+        $status = $request->string('filter', 'all')->toString();
+
+        if ($status === 'active') {
+            $query->where('completed', false);
+        }
+
+        if ($status === 'done') {
+            $query->where('completed', true);
+        }
+
+        if ($request->filled('week_date')) {
+            [$weekStart, $weekEnd] = $weeklyGridService->resolveWeekRange($request->string('week_date')->toString());
+            $query->whereBetween('due_date', [$weekStart->toDateString(), $weekEnd->toDateString()]);
+        }
+
+        if ($request->filled('schedule_id')) {
+            $query->where('schedule_id', $request->integer('schedule_id'));
+        }
+
+        $todos = $query->get();
+
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'data' => $todos,
+                'filters' => [
+                    'filter' => $status,
+                    'week_date' => $request->query('week_date'),
+                    'schedule_id' => $request->query('schedule_id'),
+                ],
+            ]);
+        }
+
         return view('todo.index', compact('todos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): RedirectResponse
     {
-        return view('todo.create');
+        return redirect()->route('todo.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreTodoRequest $request): JsonResponse|RedirectResponse
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validated = $request->validated();
+        $schedule = $this->resolveOwnedSchedule($request, $validated['schedule_id'] ?? null);
+
+        if ($schedule instanceof Schedule && empty($validated['due_date'])) {
+            $validated['due_date'] = $schedule->date->toDateString();
+        }
+
+        $todo = $request->user()->todos()->create([
+            'schedule_id' => $schedule?->id,
+            'title' => $validated['title'],
+            'completed' => $validated['completed'] ?? false,
+            'due_date' => $validated['due_date'] ?? null,
         ]);
 
-        // TODO: connect to a Todo model once it exists.
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'message' => 'Todo berhasil dibuat.',
+                'data' => $todo->fresh('schedule'),
+            ], 201);
+        }
 
-        return redirect()->route('todo.index')->with('success', 'Todo created successfully!');
+        return redirect()->route('todo.index')->with('success', 'Todo berhasil dibuat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Todo $todo)
+    public function show(Request $request, int $todo): JsonResponse|RedirectResponse
     {
-        $this->authorize('view', $todo);
-        return view('todo.show', compact('todo'));
+        $todoModel = $this->findOwnedTodo($request, $todo);
+
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'data' => $todoModel->load('schedule'),
+            ]);
+        }
+
+        return redirect()->route('todo.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Todo $todo)
+    public function edit(Request $request, int $todo): JsonResponse|RedirectResponse
     {
-        $this->authorize('update', $todo);
-        return view('todo.edit', compact('todo'));
+        $todoModel = $this->findOwnedTodo($request, $todo);
+
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'data' => $todoModel->load('schedule'),
+            ]);
+        }
+
+        return redirect()->route('todo.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Todo $todo)
+    public function update(UpdateTodoRequest $request, int $todo): JsonResponse|RedirectResponse
     {
-        $this->authorize('update', $todo);
+        $todoModel = $this->findOwnedTodo($request, $todo);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+        if ($request->boolean('toggle') && count($request->validated()) === 0) {
+            $todoModel->update([
+                'completed' => ! $todoModel->completed,
+            ]);
 
-        $todo->update([
-            'title' => $request->title,
-            'description' => $request->description,
-        ]);
+            if ($this->isPlannerApiRequest($request)) {
+                return response()->json([
+                    'message' => 'Status todo berhasil diubah.',
+                    'data' => $todoModel->fresh('schedule'),
+                ]);
+            }
 
-        return redirect()->route('todo.index')->with('success', 'Todo updated successfully!');
+            return redirect()->route('todo.index')->with('success', 'Status todo berhasil diubah.');
+        }
+
+        $validated = $request->validated();
+        $schedule = array_key_exists('schedule_id', $validated)
+            ? $this->resolveOwnedSchedule($request, $validated['schedule_id'])
+            : $todoModel->schedule;
+
+        if ($schedule instanceof Schedule && empty($validated['due_date']) && array_key_exists('schedule_id', $validated)) {
+            $validated['due_date'] = $schedule->date->toDateString();
+        }
+
+        if (array_key_exists('schedule_id', $validated)) {
+            $validated['schedule_id'] = $schedule?->id;
+        }
+
+        $todoModel->update($validated);
+
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'message' => 'Todo berhasil diperbarui.',
+                'data' => $todoModel->fresh('schedule'),
+            ]);
+        }
+
+        return redirect()->route('todo.index')->with('success', 'Todo berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Todo $todo)
+    public function destroy(Request $request, int $todo): JsonResponse|RedirectResponse
     {
-        $this->authorize('delete', $todo);
-        $todo->delete();
+        $todoModel = $this->findOwnedTodo($request, $todo);
+        $todoModel->delete();
 
-        return redirect()->route('todo.index')->with('success', 'Todo deleted successfully!');
+        if ($this->isPlannerApiRequest($request)) {
+            return response()->json([
+                'message' => 'Todo berhasil dihapus.',
+            ]);
+        }
+
+        return redirect()->route('todo.index')->with('success', 'Todo berhasil dihapus.');
+    }
+
+    private function findOwnedTodo(Request $request, int $todoId): Todo
+    {
+        return $request->user()
+            ->todos()
+            ->with('schedule')
+            ->findOrFail($todoId);
+    }
+
+    private function resolveOwnedSchedule(Request $request, int|null $scheduleId): ?Schedule
+    {
+        if (! $scheduleId) {
+            return null;
+        }
+
+        return $request->user()->schedules()->findOrFail($scheduleId);
+    }
+
+    private function isPlannerApiRequest(Request $request): bool
+    {
+        return $request->is('planner-api/*') || $request->expectsJson();
     }
 }
