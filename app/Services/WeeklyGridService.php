@@ -36,14 +36,12 @@ class WeeklyGridService
 
         $scheduleMap = $schedules->groupBy(fn (Schedule $schedule) => $schedule->date->toDateString());
         $todoMap = $todos->groupBy(fn (Todo $todo) => $todo->due_date?->toDateString());
-        $noteMap = $notes->groupBy(fn (Note $note) => $note->created_at->toDateString());
 
-        $days = collect(range(0, 6))->map(function (int $offset) use ($weekStart, $scheduleMap, $todoMap, $noteMap) {
+        $days = collect(range(0, 6))->map(function (int $offset) use ($weekStart, $scheduleMap, $todoMap) {
             $currentDay = $weekStart->copy()->addDays($offset);
             $dateKey = $currentDay->toDateString();
             $daySchedules = $scheduleMap->get($dateKey, collect())->values();
             $dayTodos = $todoMap->get($dateKey, collect())->values();
-            $dayNotes = $noteMap->get($dateKey, collect())->values();
 
             return [
                 'date' => $dateKey,
@@ -52,16 +50,9 @@ class WeeklyGridService
                 'is_today' => $currentDay->isToday(),
                 'schedule_count' => $daySchedules->count(),
                 'todo_count' => $dayTodos->count(),
-                'note_count' => $dayNotes->count(),
                 'completed_todo_count' => $dayTodos->where('completed', true)->count(),
                 'schedules' => $daySchedules->map(
                     fn (Schedule $schedule) => $this->transformSchedule($schedule)
-                )->all(),
-                'todos' => $dayTodos->map(
-                    fn (Todo $todo) => $this->transformTodo($todo)
-                )->all(),
-                'notes' => $dayNotes->map(
-                    fn (Note $note) => $this->transformNote($note)
                 )->all(),
             ];
         })->all();

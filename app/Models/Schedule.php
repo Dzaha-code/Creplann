@@ -46,14 +46,4 @@ class Schedule extends Model
 
         return $query->where('user_id', $userId);
     }
-
-    public function scopeForWeek(Builder $query, string $startDate, string $endDate): Builder
-    {
-        return $query->whereBetween('date', [$startDate, $endDate]);
-    }
-
-    public function scopeForDate(Builder $query, string $date): Builder
-    {
-        return $query->whereDate('date', $date);
-    }
 }

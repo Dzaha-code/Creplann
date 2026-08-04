@@ -215,6 +215,45 @@ main.page-body {
     padding: 26px 24px;
 }
 
+.profile-section {
+    display: grid;
+    gap: 28px;
+}
+
+.section-head {
+    margin-bottom: 24px;
+}
+
+.kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--coral-ink);
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.45rem;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: var(--ink);
+}
+
+.lede {
+    color: var(--ink-soft);
+    font-size: 0.96rem;
+    line-height: 1.7;
+    max-width: 58ch;
+    margin: 0;
+}
+
+.profile-form {
+    display: grid;
+    gap: 20px;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -243,9 +282,20 @@ main.page-body {
     background: var(--coral-ink);
 }
 
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+    box-shadow: 0 10px 22px -10px rgba(196, 67, 46, 0.55);
+}
+
+.btn-danger:hover {
+    background: #9c3024;
+}
+
 .btn-ghost {
     color: var(--ink);
-    border-color: var(--line);
+    border: 1px solid var(--line);
+    background: transparent;
 }
 
 .btn-ghost:hover {

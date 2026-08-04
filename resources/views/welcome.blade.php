@@ -12,83 +12,6 @@
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
-
-    <style>
-        .site { padding: 24px 0 0; }
-        .row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-        .brand { display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; }
-        .brand svg { width: 36px; height: 36px; }
-        .auth { display: flex; gap: 12px; align-items: center; }
-        .site header {
-            padding: 24px 0 14px;
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            background: rgba(251, 247, 240, 0.98);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(228, 217, 200, 0.55);
-        }
-
-        .hero { padding: 64px 0 56px; }
-        .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
-        .copy { max-width: 620px; }
-        .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: rgba(225, 91, 63, 0.1); color: var(--coral); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 24px; }
-        .headline { margin: 0; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(2.9rem, 5vw, 4.8rem); line-height: 0.98; max-width: 14ch; }
-        .headline .accent { position: relative; color: var(--coral); display: inline-flex; align-items: flex-end; }
-        .headline .accent svg { position: absolute; left: 0; right: 0; bottom: 0.05em; width: 110%; height: 0.9em; transform: translateY(14%); }
-        .lede { margin: 26px 0 32px; max-width: 46rem; color: var(--ink-soft); font-size: 1rem; line-height: 1.8; }
-        .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 46px; }
-        .hero-panel { background: #fff; border: 1px solid var(--line); border-radius: 30px; padding: 36px; box-shadow: 0 34px 80px -40px rgba(36, 31, 26, 0.18); }
-        .hero-panel h3 { margin: 0 0 18px; font-size: 1.15rem; letter-spacing: -0.02em; }
-        .hero-panel p { margin: 0 0 22px; color: var(--ink-soft); line-height: 1.85; }
-        .preview-row { display: grid; gap: 14px; }
-        .preview-card { padding: 18px 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; }
-        .preview-card strong { display: block; margin-bottom: 10px; font-size: 0.98rem; }
-        .preview-card p { margin: 0; font-size: 0.92rem; color: var(--ink-soft); line-height: 1.7; }
-        .week-strip { display: flex; align-items: center; gap: 10px; overflow-x: auto; padding: 18px 18px 16px; border-radius: 999px; border: 1px solid var(--line); background: #fff; box-shadow: 0 26px 50px -30px rgba(36, 31, 26, 0.16); }
-        .day { min-width: 42px; min-height: 42px; border-radius: 999px; display: grid; place-items: center; font-weight: 700; color: var(--ink); background: var(--paper); position: relative; }
-        .day.done { background: var(--sage); color: #fff; }
-        .day.today { border: 2px solid var(--coral); background: #fff; }
-        .day.today .scribble { position: absolute; inset: 0; width: 100%; height: 100%; transform: translate(-8%, -8%); }
-        .features { padding: 0 0 72px; }
-        .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 34px; flex-wrap: wrap; }
-        .kicker { font-size: 0.82rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--coral); font-weight: 700; }
-        .section-title { margin: 0; font-size: clamp(2rem, 3vw, 2.55rem); line-height: 1.08; max-width: 54rem; }
-        .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-        .card { padding: 28px 26px; min-height: 260px; display: flex; flex-direction: column; gap: 18px; }
-        .card h3 { margin: 0; font-size: 1.12rem; }
-        .card p { margin: 0; color: var(--ink-soft); line-height: 1.75; font-size: 0.98rem; }
-        .icon { width: 44px; height: 44px; color: var(--coral); }
-        .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; padding: 28px 0 12px; color: var(--ink-soft); font-size: 0.95rem; }
-        .quick-links { display: flex; flex-wrap: wrap; gap: 18px; }
-        .quick-links a { transition: color 0.2s ease; }
-        .quick-links a:hover { color: var(--coral); }
-
-        @media (max-width: 960px) {
-            .hero-grid { grid-template-columns: 1fr; }
-            .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-
-        @media (max-width: 720px) {
-            .site header { padding: 18px 0 12px; }
-            .row { flex-direction: column; align-items: flex-start; }
-            .auth { width: 100%; justify-content: flex-start; }
-            .headline { font-size: clamp(2.3rem, 7vw, 3.4rem); max-width: 100%; }
-            .lede { margin-top: 20px; }
-            .cards { grid-template-columns: 1fr; }
-            .cta-row { flex-direction: column; width: 100%; }
-            .btn { width: 100%; justify-content: center; }
-            .footer-row { flex-direction: column; align-items: flex-start; }
-        }
-
-        @media (max-width: 520px) {
-            .wrap { padding: 0 18px; }
-            .hero { padding-top: 48px; padding-bottom: 42px; }
-            .hero-panel { padding: 24px; }
-            .brand { font-size: 0.98rem; }
-            .day { min-width: 38px; min-height: 38px; }
-        }
-    </style>
 </head>
 <body class="antialiased">
 
@@ -119,35 +42,39 @@
     </header>
 
     <main class="hero">
-        <div class="wrap hero-grid">
-            <div class="copy">
-                <span class="eyebrow">✦ Perencanaan mingguan yang tenang</span>
+        <div class="wrap">
+            <span class="eyebrow">✦ Perencanaan mingguan yang tenang</span>
 
-                <h1 class="headline">
-                    Atur pekanmu,
-                    rancang <span class="accent">masa depan</span> yang jernih.
-                </h1>
+            <h1 class="headline">
+                Atur pekanmu,<br>
+                rancang <span class="accent">masa depan
+                    <svg viewBox="0 0 200 20" preserveAspectRatio="none">
+                        <path d="M2 14C40 4, 90 4, 130 12S190 18, 198 8" stroke="var(--coral)" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </span> yang jernih.
+            </h1>
 
-                <p class="lede">
-                    Tinggalkan catatan yang berserakan. CrePlann membantumu menyusun prioritas,
-                    memantau progres, dan menutup pekan dengan tenang — bukan dengan stres.
-                </p>
+            <p class="lede">
+                Tinggalkan catatan yang berserakan. CrePlann membantumu menyusun prioritas,
+                memantau progres, dan menutup pekan dengan tenang — bukan dengan stres.
+            </p>
 
-                <div class="cta-row">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-solid">Buka Planner Saya</a>
-                    @else
-                        <a href="{{ route('register') }}" class="btn btn-solid">Mulai Sekarang — Gratis</a>
-                        <a href="{{ route('login') }}" class="btn btn-ghost">Masuk Akun</a>
-                    @endauth
-                </div>
+            <div class="cta-row">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="btn btn-solid">Buka Planner Saya</a>
+                @else
+                    <a href="{{ route('register') }}" class="btn btn-solid">Mulai Sekarang — Gratis</a>
+                    <a href="{{ route('login') }}" class="btn btn-ghost">Masuk Akun</a>
+                @endauth
+            </div>
 
-                <div class="week-strip">
-                    @php
-                        $days = ['S','S','R','K','J','S','M'];
-                    @endphp
-                    @foreach ($days as $i => $d)
-                        <div class="day {{ $i < 3 ? 'done' : '' }} {{ $i === 3 ? 'today' : '' }}">
+            <div class="week-strip">
+                @php
+                    $days = ['S','S','R','K','J','S','M'];
+                @endphp
+                @foreach ($days as $i => $d)
+                    <div class="day {{ $i < 3 ? 'done' : '' }} {{ $i === 3 ? 'today' : '' }}">
+                        <div class="dot">
                             {{ $d }}
                             @if ($i === 3)
                                 <svg class="scribble" viewBox="0 0 52 52" fill="none">
@@ -155,24 +82,8 @@
                                 </svg>
                             @endif
                         </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="hero-panel">
-                <h3>Rapi dan siap digunakan di Android & tablet</h3>
-                <p>Dashboard dibuat untuk tampilan layar lebar dan ponsel, jadi kamu bisa cek jadwal, todo, dan notes tanpa ribet.</p>
-
-                <div class="preview-row">
-                    <div class="preview-card">
-                        <strong>Jadwal Mingguan</strong>
-                        <p>Kalender dengan highlight aktivitas hari ini dan status selesai di tampilan yang mudah dibaca.</p>
                     </div>
-                    <div class="preview-card">
-                        <strong>Todo Cepat</strong>
-                        <p>Tambahkan tugas baru dengan cepat dan tandai selesai tanpa berpindah halaman.</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </main>

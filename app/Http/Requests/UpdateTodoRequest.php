@@ -16,7 +16,7 @@ class UpdateTodoRequest extends FormRequest
     {
         return [
             'schedule_id' => ['sometimes', 'nullable', 'integer', 'exists:schedules,id'],
-            'title' => ['sometimes', 'required', 'string', 'max:100'],
+            'title' => ['sometimes', 'required', 'string', 'max:255'],
             'completed' => ['sometimes', 'boolean'],
             'due_date' => ['sometimes', 'nullable', 'date'],
         ];

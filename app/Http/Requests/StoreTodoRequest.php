@@ -16,7 +16,7 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             'schedule_id' => ['nullable', 'integer', 'exists:schedules,id'],
-            'title' => ['required', 'string', 'max:100'],
+            'title' => ['required', 'string', 'max:255'],
             'completed' => ['nullable', 'boolean'],
             'due_date' => ['nullable', 'date'],
         ];
