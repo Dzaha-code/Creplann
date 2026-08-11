@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
 use App\Services\ScheduleTodoService;
 use App\Services\WeeklyGridService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -50,9 +51,10 @@ class ScheduleController extends Controller
         );
     }
 
-    public function store(StoreScheduleRequest $request): JsonResponse
+    public function store(StoreScheduleRequest $request, ScheduleTodoService $scheduleTodoService): JsonResponse
     {
         $schedule = $request->user()->schedules()->create($request->validated());
+        $scheduleTodoService->generateFromSchedule($schedule);
 
         return response()->json([
             'message' => 'Schedule berhasil dibuat.',

@@ -83,7 +83,7 @@ describe('Weekly Grid API', function () {
 });
 
 describe('Schedule API', function () {
-    it('creates a schedule with valid data', function () {
+    it('creates a schedule with valid data and linked todo', function () {
         $date = now()->addDay()->toDateString();
 
         $response = $this->actingAs($this->user)->postJson('/planner-api/schedules', [
@@ -100,10 +100,22 @@ describe('Schedule API', function () {
             ->assertJsonPath('data.title', 'Belajar Laravel')
             ->assertJsonPath('data.priority', 'high');
 
+        $schedule = Schedule::where('user_id', $this->user->id)
+            ->where('title', 'Belajar Laravel')
+            ->latest('id')
+            ->first();
+
         $this->assertDatabaseHas('schedules', [
             'user_id' => $this->user->id,
             'title' => 'Belajar Laravel',
             'date' => $date,
+        ]);
+
+        $this->assertDatabaseHas('todos', [
+            'user_id' => $this->user->id,
+            'schedule_id' => $schedule->id,
+            'title' => 'Belajar Laravel',
+            'due_date' => $date,
         ]);
     });
 
