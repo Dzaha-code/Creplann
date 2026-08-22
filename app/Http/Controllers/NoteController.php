@@ -15,6 +15,8 @@ class NoteController extends Controller
 {
     public function index(Request $request, WeeklyGridService $weeklyGridService): JsonResponse|View
     {
+        $request->user()->ensureDefaultCategory();
+
         $query = $request->user()
             ->notes()
             ->with('category')
@@ -49,7 +51,7 @@ class NoteController extends Controller
             ]);
         }
 
-        return view('note.index', compact('notes', 'categories'));
+        return view('Note.index', compact('notes', 'categories'));
     }
 
     public function create(): RedirectResponse
@@ -59,7 +61,13 @@ class NoteController extends Controller
 
     public function store(StoreNoteRequest $request): JsonResponse|RedirectResponse
     {
-        $note = $request->user()->notes()->create($request->validated());
+        $validated = $request->validated();
+
+        if (empty($validated['category_id'])) {
+            $validated['category_id'] = $request->user()->ensureDefaultCategory()->id;
+        }
+
+        $note = $request->user()->notes()->create($validated);
 
         if ($this->isPlannerApiRequest($request)) {
             return response()->json([
@@ -100,7 +108,13 @@ class NoteController extends Controller
     public function update(UpdateNoteRequest $request, int $note): JsonResponse|RedirectResponse
     {
         $noteModel = $this->findOwnedNote($request, $note);
-        $noteModel->update($request->validated());
+        $validated = $request->validated();
+
+        if (array_key_exists('category_id', $validated) && empty($validated['category_id'])) {
+            $validated['category_id'] = $request->user()->ensureDefaultCategory()->id;
+        }
+
+        $noteModel->update($validated);
 
         if ($this->isPlannerApiRequest($request)) {
             return response()->json([

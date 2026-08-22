@@ -1,16 +1,58 @@
 <x-app-layout>
-    <x-slot name="header">Todo</x-slot>
+    <x-slot name="header">
+        <div class="page-header">
+            <div class="page-header-inner">
 
-    <div class="wrap">
+                <div>
+                    <h1 class="page-title">Todo</h1>
+                    <p class="page-sub">Kelola tugas harianmu dengan mudah</p>
+                </div>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="td-wrap">
+        @php
+            $filter = request('filter', 'all');
+
+            $activeTodos = collect($todos ?? [])
+                ->where('completed', false)
+                ->values();
+
+            $archivedTodos = collect($todos ?? [])
+                ->where('completed', true)
+                ->sortByDesc(function ($todo) {
+                    $dt = $todo->completed_at ?? $todo->updated_at ?? $todo->created_at;
+                    return $dt?->timestamp ?? 0;
+                })
+                ->values();
+
+            $archivedByMonth = $archivedTodos->groupBy(function ($todo) {
+                $dt = $todo->completed_at ?? $todo->updated_at ?? $todo->created_at;
+                return $dt?->format('Y-m') ?? 'unknown';
+            });
+
+            $isArchiveView = $filter === 'done';
+            $showActiveSection = $filter !== 'done';
+            $showArchiveSection = $filter !== 'active';
+
+            $counterCount = $isArchiveView ? $archivedTodos->count() : $activeTodos->count();
+            $counterText = $isArchiveView ? 'selesai' : 'tugas';
+        @endphp
+
+        {{-- ── Success banner ── --}}
         @if (session('success'))
-            <div class="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                {{ session('success') }}
+            <div class="td-banner td-banner--success" role="alert">
+                <i class="ti ti-circle-check" aria-hidden="true"></i>
+                <span>{{ session('success') }}</span>
             </div>
         @endif
 
+        {{-- ── Error banner ── --}}
         @if ($errors->any())
-            <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                <ul class="list-disc pl-5">
+            <div class="td-banner td-banner--error" role="alert">
+                <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -18,78 +60,137 @@
             </div>
         @endif
 
-        {{-- Tambah todo baru --}}
-        <form method="POST" action="{{ route('todo.store') }}" class="todo-add">
-            @csrf
-            <input type="text" name="title" placeholder="Tulis tugas baru…" required autofocus>
-            <input type="date" name="due_date" value="{{ old('due_date') }}">
-            <button type="submit" class="btn btn-solid">+ Tambah</button>
-        </form>
-
-        {{-- Filter --}}
-        <div class="filter-tabs">
-            <a href="{{ route('todo.index') }}" class="{{ request('filter', 'all') === 'all' ? 'active' : '' }}">Semua</a>
-            <a href="{{ route('todo.index', ['filter' => 'active']) }}" class="{{ request('filter') === 'active' ? 'active' : '' }}">Aktif</a>
-            <a href="{{ route('todo.index', ['filter' => 'done']) }}" class="{{ request('filter') === 'done' ? 'active' : '' }}">Selesai</a>
+        {{-- ── Add form ── --}}
+        <div class="td-add-card">
+            <form method="POST" action="{{ route('todo.store') }}" class="td-add-form">
+                @csrf
+                <div class="td-add-inner">
+                    <i class="ti ti-pencil-plus td-add-prefix" aria-hidden="true"></i>
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Tulis tugas baru…"
+                        required
+                        autofocus
+                        value="{{ old('title') }}"
+                        class="td-add-input"
+                        autocomplete="off"
+                    >
+                    <div class="td-add-sep" aria-hidden="true"></div>
+                    <div class="td-date-wrap">
+                        <i class="ti ti-calendar td-date-icon" aria-hidden="true"></i>
+                        <input type="date" name="due_date" value="{{ old('due_date') }}" class="td-date-input">
+                    </div>
+                    <button type="submit" class="td-add-btn">
+                        <i class="ti ti-plus" aria-hidden="true"></i>
+                        <span>Tambah</span>
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <div class="todo-list">
-            <div class="card">
-                @forelse ($todos ?? [] as $todo)
-                    <div class="todo-row {{ $todo->completed ? 'checked' : '' }}">
-                        <div class="flex items-center justify-between gap-3">
-                            <form method="POST" action="{{ route('todo.update', $todo->id) }}" class="flex flex-1 items-center gap-2">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" name="toggle" value="1" class="checkbox-btn" title="Tandai selesai/belum selesai">
-                                    @if ($todo->completed)
-                                        <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
-                                            <path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    @endif
-                                </button>
-                                <div class="flex flex-col">
-                                    <span class="title">{{ $todo->title }}</span>
-                                    @if ($todo->due_date)
-                                        <span class="due">{{ \Illuminate\Support\Carbon::parse($todo->due_date)->translatedFormat('d M') }}</span>
-                                    @endif
-                                </div>
-                            </form>
+        {{-- ── Filter bar ── --}}
+        <div class="td-filter-bar">
+            <nav class="td-filter-tabs" role="tablist" aria-label="Filter tugas">
+                <a
+                    href="{{ route('todo.index') }}"
+                    class="td-filter-tab {{ request('filter', 'all') === 'all' ? 'active' : '' }}"
+                    role="tab"
+                    aria-selected="{{ request('filter', 'all') === 'all' ? 'true' : 'false' }}"
+                >
+                    <i class="ti ti-layout-list" aria-hidden="true"></i> Semua
+                </a>
+                <a
+                    href="{{ route('todo.index', ['filter' => 'active']) }}"
+                    class="td-filter-tab {{ request('filter') === 'active' ? 'active' : '' }}"
+                    role="tab"
+                    aria-selected="{{ request('filter') === 'active' ? 'true' : 'false' }}"
+                >
+                    <i class="ti ti-circle-dot" aria-hidden="true"></i> Aktif
+                </a>
+                <a
+                    href="{{ route('todo.index', ['filter' => 'done']) }}"
+                    class="td-filter-tab {{ request('filter') === 'done' ? 'active' : '' }}"
+                    role="tab"
+                    aria-selected="{{ request('filter') === 'done' ? 'true' : 'false' }}"
+                >
+                    <i class="ti ti-circle-check" aria-hidden="true"></i> Selesai
+                </a>
+            </nav>
 
-                            <div class="flex items-center gap-2">
-                                <button type="button" class="btn btn-outline" onclick="document.getElementById('edit-todo-{{ $todo->id }}').classList.toggle('hidden')">
-                                    Edit
-                                </button>
-                                <form method="POST" action="{{ route('todo.destroy', $todo->id) }}" onsubmit="return confirm('Hapus tugas ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="delete-btn" title="Hapus">
-                                        <svg viewBox="0 0 24 24" fill="none">
-                                            <path d="M5 7h14M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2m-8 0v12a2 2 0 002 2h6a2 2 0 002-2V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <form id="edit-todo-{{ $todo->id }}" method="POST" action="{{ route('todo.update', $todo->id) }}" class="mt-3 hidden">
-                            @csrf
-                            @method('PATCH')
-                            <div class="flex flex-col gap-2 md:flex-row">
-                                <input type="text" name="title" value="{{ $todo->title }}" required class="flex-1">
-                                <input type="date" name="due_date" value="{{ $todo->due_date ? \Illuminate\Support\Carbon::parse($todo->due_date)->format('Y-m-d') : '' }}">
-                                <button type="submit" class="btn btn-solid">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                @empty
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 12l2.6 2.6L16.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        <p>Belum ada tugas di sini. Tambahkan yang pertama di atas.</p>
-                    </div>
-                @endforelse
+            <div class="td-counter" aria-live="polite">
+                <i class="ti ti-list-check" aria-hidden="true"></i>
+                <span class="td-counter-num">{{ $counterCount }}</span>
+                <span>{{ $counterText }}</span>
             </div>
         </div>
 
-    </div>
+        {{-- ── Active todo list ── --}}
+        @if ($showActiveSection)
+            <div class="td-list">
+                @forelse ($activeTodos as $todo)
+                    @include('todo._item', ['todo' => $todo])
+                @empty
+                    <div class="td-empty" role="status">
+                        <i class="ti ti-mood-empty" aria-hidden="true"></i>
+                        <p class="td-empty-title">Belum ada tugas aktif</p>
+                        <p class="td-empty-sub">Tambahkan tugas baru di atas atau buka arsip selesai.</p>
+                    </div>
+                @endforelse
+            </div>
+        @endif
+
+        {{-- ── Completed archive ── --}}
+        @if ($showArchiveSection)
+            <details class="td-archive" {{ $isArchiveView ? 'open' : '' }}>
+                <summary class="td-archive-summary">
+                    <span class="td-archive-heading">
+                        <i class="ti ti-archive" aria-hidden="true"></i>
+                        <span>Arsip selesai</span>
+                        <span class="td-archive-count">{{ $archivedTodos->count() }}</span>
+                    </span>
+                    <i class="ti ti-chevron-down td-archive-chevron" aria-hidden="true"></i>
+                </summary>
+
+                <div class="td-archive-body">
+                    @if ($archivedTodos->isNotEmpty())
+                        @foreach ($archivedByMonth as $monthKey => $monthTodos)
+                            @php
+                                $monthLabel = $monthKey === 'unknown'
+                                    ? 'Tanpa tanggal'
+                                    : \Illuminate\Support\Carbon::createFromFormat('Y-m', $monthKey)->translatedFormat('F Y');
+                            @endphp
+
+                            <details class="td-archive-month" {{ $isArchiveView && $loop->first ? 'open' : '' }}>
+                                <summary class="td-archive-month-summary">
+                                    <span class="td-archive-month-heading">
+                                        <span class="td-archive-month-title">{{ $monthLabel }}</span>
+                                        <span class="td-archive-month-count">{{ $monthTodos->count() }}</span>
+                                    </span>
+                                    <i class="ti ti-chevron-down td-archive-month-chevron" aria-hidden="true"></i>
+                                </summary>
+
+                                <div class="td-list td-archive-month-list">
+                                    @foreach ($monthTodos as $todo)
+                                        @include('todo._item', ['todo' => $todo])
+                                    @endforeach
+                                </div>
+                            </details>
+                        @endforeach
+                    @else
+                        <div class="td-empty td-empty--archive" role="status">
+                            <i class="ti ti-archive-off" aria-hidden="true"></i>
+                            <p class="td-empty-title">Belum ada tugas selesai</p>
+                            <p class="td-empty-sub">Tugas yang kamu selesaikan akan otomatis masuk ke arsip per bulan.</p>
+                        </div>
+                    @endif
+                </div>
+            </details>
+        @endif
+
+    </div>{{-- /.td-wrap --}}
+    @push('head')
+        @vite(['resources/css/pages/todo.css', 'resources/js/pages/todo.js'])
+    @endpush
+
 </x-app-layout>

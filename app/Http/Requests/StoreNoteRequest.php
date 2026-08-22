@@ -15,7 +15,7 @@ class StoreNoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
         ];
@@ -24,6 +24,10 @@ class StoreNoteRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
+            if (! $this->filled('category_id')) {
+                return;
+            }
+
             $categoryId = $this->integer('category_id');
 
             if (! $this->user()->categories()->whereKey($categoryId)->exists()) {

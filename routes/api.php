@@ -8,8 +8,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/users', [UserApiController::class, 'index']);
-Route::get('/users/{user}', [UserApiController::class, 'show']);
-Route::post('/users', [UserApiController::class, 'store']);
-Route::put('/users/{user}', [UserApiController::class, 'update']);
-Route::delete('/users/{user}', [UserApiController::class, 'destroy']);
+Route::middleware('auth')->group(function () {
+    Route::get('/users', [UserApiController::class, 'index']);
+    Route::get('/users/{user}', [UserApiController::class, 'show']);
+    Route::post('/users', [UserApiController::class, 'store']);
+    Route::put('/users/{user}', [UserApiController::class, 'update']);
+    Route::delete('/users/{user}', [UserApiController::class, 'destroy']);
+});

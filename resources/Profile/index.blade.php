@@ -122,5 +122,76 @@
             </div>
 
         </div>
-    </div>
+        /* ── Design correction pass for profile page ── */
+        .profile-stack {
+            max-width: 760px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: rgba(255, 253, 248, 0.82);
+            border: 1px solid rgba(32, 36, 31, 0.12);
+            border-radius: 18px;
+            padding: 24px 24px 18px;
+            box-shadow: 0 10px 18px rgba(32, 36, 31, 0.03);
+        }
+
+        .section-title {
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 2.1rem;
+            letter-spacing: -0.04em;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .section-sub {
+            color: rgba(32, 36, 31, 0.65);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(32, 36, 31, 0.7);
+        }
+
+        .field input {
+            border: 1px solid rgba(32, 36, 31, 0.12);
+            background: rgba(232, 227, 210, 0.28);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+
+        .field input:focus {
+            border-color: rgba(217, 143, 43, 0.75);
+            box-shadow: 0 0 0 4px rgba(217, 143, 43, 0.1);
+        }
+
+        .btn {
+            border-radius: 12px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-inline: 18px;
+        }
+
+        .btn-solid {
+            background: var(--coral);
+            color: var(--board);
+            box-shadow: 0 10px 18px -12px rgba(217, 143, 43, 0.7);
+        }
+
+        .btn-danger {
+            border: 1px solid rgba(173, 58, 44, 0.25);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--danger);
+        }
+    </style>
 </x-app-layout>

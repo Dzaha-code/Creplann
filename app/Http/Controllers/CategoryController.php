@@ -19,10 +19,13 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request): JsonResponse
     {
-        $category = $request->user()->categories()->create($request->validated());
+        $category = $request->user()->categories()->create([
+            'name' => $request->validated('name'),
+            'color' => $request->validated('color'),
+        ]);
 
         return response()->json([
-            'message' => 'Category berhasil dibuat.',
+            'message' => 'Kategori berhasil dibuat.',
             'data' => $category->fresh()->loadCount('notes'),
         ], 201);
     }
@@ -37,10 +40,15 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, int $category): JsonResponse
     {
         $categoryModel = $this->findOwnedCategory($request, $category);
-        $categoryModel->update($request->validated());
+        $validated = $request->validated();
+
+        $categoryModel->update([
+            'name' => $validated['name'] ?? $categoryModel->name,
+            'color' => $validated['color'] ?? $categoryModel->color,
+        ]);
 
         return response()->json([
-            'message' => 'Category berhasil diperbarui.',
+            'message' => 'Kategori berhasil diperbarui.',
             'data' => $categoryModel->fresh()->loadCount('notes'),
         ]);
     }
@@ -48,10 +56,24 @@ class CategoryController extends Controller
     public function destroy(Request $request, int $category): JsonResponse
     {
         $categoryModel = $this->findOwnedCategory($request, $category);
+
+        if ($categoryModel->name === 'Umum') {
+            return response()->json([
+                'message' => 'Kategori Umum tidak dapat dihapus.',
+            ], 422);
+        }
+
+        $defaultCategory = $request->user()->ensureDefaultCategory();
+
+        $request->user()
+            ->notes()
+            ->where('category_id', $categoryModel->id)
+            ->update(['category_id' => $defaultCategory->id]);
+
         $categoryModel->delete();
 
         return response()->json([
-            'message' => 'Category berhasil dihapus.',
+            'message' => 'Kategori berhasil dihapus.',
         ]);
     }
 

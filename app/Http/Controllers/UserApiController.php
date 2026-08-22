@@ -8,14 +8,18 @@ use Illuminate\Http\Request;
 
 class UserApiController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(User::all());
+        return response()->json([
+            'data' => [$request->user()->only(['id', 'name', 'email', 'avatar', 'google_id'])],
+        ]);
     }
 
-    public function show(User $user): JsonResponse
+    public function show(Request $request, User $user): JsonResponse
     {
-        return response()->json($user);
+        abort_unless($request->user()?->is($user), 403, 'You do not have permission to view this user.');
+
+        return response()->json(['data' => $user->only(['id', 'name', 'email', 'avatar', 'google_id'])]);
     }
 
     public function store(Request $request): JsonResponse
@@ -28,11 +32,13 @@ class UserApiController extends Controller
 
         $user = User::create($validatedData);
 
-        return response()->json($user, 201);
+        return response()->json(['data' => $user->only(['id', 'name', 'email'])], 201);
     }
 
     public function update(Request $request, User $user): JsonResponse
     {
+        abort_unless($request->user()?->is($user), 403, 'You do not have permission to update this user.');
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
@@ -41,11 +47,13 @@ class UserApiController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json($user);
+        return response()->json(['data' => $user->fresh()->only(['id', 'name', 'email', 'avatar', 'google_id'])]);
     }
 
-    public function destroy(User $user): JsonResponse
+    public function destroy(Request $request, User $user): JsonResponse
     {
+        abort_unless($request->user()?->is($user), 403, 'You do not have permission to delete this user.');
+
         $user->delete();
 
         return response()->json(null, 204);

@@ -83,7 +83,7 @@ describe('Weekly Grid API', function () {
 });
 
 describe('Schedule API', function () {
-    it('creates a schedule with valid data and linked todo', function () {
+    it('creates a schedule without auto-generating todo', function () {
         $date = now()->addDay()->toDateString();
 
         $response = $this->actingAs($this->user)->postJson('/planner-api/schedules', [
@@ -111,12 +111,7 @@ describe('Schedule API', function () {
             'date' => $date,
         ]);
 
-        $this->assertDatabaseHas('todos', [
-            'user_id' => $this->user->id,
-            'schedule_id' => $schedule->id,
-            'title' => 'Belajar Laravel',
-            'due_date' => $date,
-        ]);
+        expect(Todo::where('schedule_id', $schedule->id)->count())->toBe(0);
     });
 
     it('rejects schedule with past date', function () {
@@ -195,6 +190,34 @@ describe('Schedule API', function () {
 
         expect(Todo::where('schedule_id', $schedule->id)->count())->toBe(1);
     });
+
+    it('syncs linked todo when schedule is updated', function () {
+        $date = now()->addDays(2)->toDateString();
+        $schedule = Schedule::factory()->forUser($this->user)->create([
+            'title' => 'Rapat Tim',
+            'date' => $date,
+        ]);
+
+        Todo::factory()->forUser($this->user)->fromSchedule($schedule)->create([
+            'title' => 'Rapat Tim',
+            'due_date' => $date,
+        ]);
+
+        $newDate = now()->addDays(3)->toDateString();
+
+        $this->actingAs($this->user)
+            ->patchJson("/planner-api/schedules/{$schedule->id}", [
+                'title' => 'Rapat Tim (Updated)',
+                'date' => $newDate,
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('todos', [
+            'schedule_id' => $schedule->id,
+            'title' => 'Rapat Tim (Updated)',
+            'due_date' => $newDate,
+        ]);
+    });
 });
 
 describe('Todo API', function () {
@@ -270,6 +293,27 @@ describe('Todo API', function () {
 });
 
 describe('Note & Category API', function () {
+    it('creates a default umum category for every user and allows notes without category', function () {
+        $defaultCategory = $this->user->categories()->where('name', 'Umum')->first();
+
+        expect($defaultCategory)->not->toBeNull()
+            ->and($defaultCategory->name)->toBe('Umum');
+
+        $response = $this->actingAs($this->user)->postJson('/planner-api/notes', [
+            'title' => 'Catatan default',
+            'content' => 'Tanpa kategori khusus',
+        ]);
+
+        $response->assertCreated()
+            ->assertJsonPath('data.category.name', 'Umum');
+
+        $this->assertDatabaseHas('notes', [
+            'user_id' => $this->user->id,
+            'title' => 'Catatan default',
+            'category_id' => $defaultCategory->id,
+        ]);
+    });
+
     it('creates category and note', function () {
         $category = $this->actingAs($this->user)
             ->postJson('/planner-api/categories', [
@@ -354,5 +398,74 @@ describe('Note & Category API', function () {
         $response->assertOk();
         expect($response->json('data'))->toHaveCount(1);
         expect($response->json('data.0.title'))->toBe('Note Monday');
+    });
+
+    it('updates and deletes owned note', function () {
+        $category = Category::factory()->forUser($this->user)->create(['name' => 'Belajar']);
+        $note = Note::factory()->inCategory($category)->create([
+            'user_id' => $this->user->id,
+            'title' => 'Judul Lama',
+            'content' => 'Isi lama',
+        ]);
+
+        $newCategory = Category::factory()->forUser($this->user)->create(['name' => 'Project']);
+
+        $this->actingAs($this->user)
+            ->patchJson("/planner-api/notes/{$note->id}", [
+                'title' => 'Judul Baru',
+                'content' => 'Isi baru',
+                'category_id' => $newCategory->id,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.title', 'Judul Baru')
+            ->assertJsonPath('data.category_id', $newCategory->id);
+
+        $this->assertDatabaseHas('notes', [
+            'id' => $note->id,
+            'title' => 'Judul Baru',
+            'category_id' => $newCategory->id,
+        ]);
+
+        $this->actingAs($this->user)
+            ->deleteJson("/planner-api/notes/{$note->id}")
+            ->assertOk();
+
+        $this->assertDatabaseMissing('notes', ['id' => $note->id]);
+    });
+
+    it('updates category and moves notes to umum when category is deleted', function () {
+        $defaultCategory = $this->user->ensureDefaultCategory();
+        $category = Category::factory()->forUser($this->user)->create(['name' => 'Sekolah']);
+
+        $note = Note::factory()->inCategory($category)->create([
+            'user_id' => $this->user->id,
+            'title' => 'Catatan Sekolah',
+        ]);
+
+        $this->actingAs($this->user)
+            ->patchJson("/planner-api/categories/{$category->id}", [
+                'name' => 'Sekolah Updated',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Sekolah Updated');
+
+        $this->actingAs($this->user)
+            ->deleteJson("/planner-api/categories/{$category->id}")
+            ->assertOk();
+
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+        $this->assertDatabaseHas('notes', [
+            'id' => $note->id,
+            'category_id' => $defaultCategory->id,
+        ]);
+    });
+
+    it('prevents deleting default umum category', function () {
+        $defaultCategory = $this->user->ensureDefaultCategory();
+
+        $this->actingAs($this->user)
+            ->deleteJson("/planner-api/categories/{$defaultCategory->id}")
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'Kategori Umum tidak dapat dihapus.');
     });
 });

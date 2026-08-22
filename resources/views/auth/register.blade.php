@@ -8,13 +8,17 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="https://fonts.gstatic.com/s/bigshouldersdisplay/v24/fC1_PZJEZG-e9gHhdI4-NBbfd2ys3SjJCx1czNDuDJAM2w.woff2">
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css'])
     @endif
 </head>
 <body class="auth-page">
+
+    <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
 
     <a href="{{ url('/') }}" class="brand">
         <svg viewBox="0 0 40 40" fill="none">
@@ -25,7 +29,7 @@
         <span>{{ config('app.name', 'CrePlann') }}</span>
     </a>
 
-    <div class="auth-card">
+    <div class="auth-card" id="main-content" tabindex="-1">
         <h1>Buat akun baru</h1>
         <p class="lede">Mulai rancang pekanmu bersama {{ config('app.name', 'CrePlann') }}, gratis.</p>
 
@@ -73,6 +77,8 @@
                 <button type="submit" class="btn btn-solid">Daftar</button>
             </div>
         </form>
+
+        <x-google-auth-button />
     </div>
 
     <a href="{{ url('/') }}" class="back-home">← Kembali ke beranda</a>

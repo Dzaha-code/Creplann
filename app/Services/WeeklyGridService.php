@@ -10,7 +10,26 @@ use Carbon\Carbon;
 
 class WeeklyGridService
 {
-    public function buildForUser(User $user, string|null $anchorDate = null): array
+    /**
+     * Build grid mingguan dengan query cache (5 menit, auto-invalidasi
+     * via GridCacheService::flush pada model events).
+     */
+    public function buildForUser(User $user, string|null $anchorDate = null, bool $useCache = true): array
+    {
+        if (! $useCache) {
+            return $this->build($user, $anchorDate);
+        }
+
+        [$weekStart] = $this->resolveWeekRange($anchorDate);
+
+        return GridCacheService::remember(
+            $user,
+            $weekStart->toDateString(),
+            fn (): array => $this->build($user, $anchorDate)
+        );
+    }
+
+    private function build(User $user, string|null $anchorDate = null): array
     {
         [$weekStart, $weekEnd, $anchor] = $this->resolveWeekRange($anchorDate);
 
@@ -36,12 +55,14 @@ class WeeklyGridService
 
         $scheduleMap = $schedules->groupBy(fn (Schedule $schedule) => $schedule->date->toDateString());
         $todoMap = $todos->groupBy(fn (Todo $todo) => $todo->due_date?->toDateString());
+        $noteMap = $notes->groupBy(fn (Note $note) => $note->created_at?->toDateString());
 
-        $days = collect(range(0, 6))->map(function (int $offset) use ($weekStart, $scheduleMap, $todoMap) {
+        $days = collect(range(0, 6))->map(function (int $offset) use ($weekStart, $scheduleMap, $todoMap, $noteMap) {
             $currentDay = $weekStart->copy()->addDays($offset);
             $dateKey = $currentDay->toDateString();
             $daySchedules = $scheduleMap->get($dateKey, collect())->values();
             $dayTodos = $todoMap->get($dateKey, collect())->values();
+            $dayNotes = $noteMap->get($dateKey, collect())->values();
 
             return [
                 'date' => $dateKey,
@@ -50,9 +71,16 @@ class WeeklyGridService
                 'is_today' => $currentDay->isToday(),
                 'schedule_count' => $daySchedules->count(),
                 'todo_count' => $dayTodos->count(),
+                'note_count' => $dayNotes->count(),
                 'completed_todo_count' => $dayTodos->where('completed', true)->count(),
                 'schedules' => $daySchedules->map(
                     fn (Schedule $schedule) => $this->transformSchedule($schedule)
+                )->all(),
+                'todos' => $dayTodos->map(
+                    fn (Todo $todo) => $this->transformTodo($todo)
+                )->all(),
+                'notes' => $dayNotes->map(
+                    fn (Note $note) => $this->transformNote($note)
                 )->all(),
             ];
         })->all();

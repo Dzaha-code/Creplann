@@ -42,6 +42,9 @@ class TodoFactory extends Factory
 
     public function completed(): static
     {
-        return $this->state(fn () => ['completed' => true]);
+        return $this->state(fn () => [
+            'completed' => true,
+            'completed_at' => now(),
+        ]);
     }
 }

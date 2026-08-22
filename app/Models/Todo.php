@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\GridCacheService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class Todo extends Model
         'schedule_id',
         'title',
         'completed',
+        'completed_at',
         'due_date',
     ];
 
@@ -23,6 +25,7 @@ class Todo extends Model
     {
         return [
             'completed' => 'boolean',
+            'completed_at' => 'datetime',
             'due_date' => 'date:Y-m-d',
         ];
     }
@@ -30,6 +33,12 @@ class Todo extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(fn (self $model) => GridCacheService::flush((int) $model->user_id));
+        static::deleted(fn (self $model) => GridCacheService::flush((int) $model->user_id));
     }
 
     public function schedule(): BelongsTo

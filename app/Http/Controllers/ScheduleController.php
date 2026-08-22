@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+
 class ScheduleController extends Controller
 {
     public function index(): View
@@ -51,10 +52,9 @@ class ScheduleController extends Controller
         );
     }
 
-    public function store(StoreScheduleRequest $request, ScheduleTodoService $scheduleTodoService): JsonResponse
+    public function store(StoreScheduleRequest $request): JsonResponse
     {
         $schedule = $request->user()->schedules()->create($request->validated());
-        $scheduleTodoService->generateFromSchedule($schedule);
 
         return response()->json([
             'message' => 'Schedule berhasil dibuat.',
@@ -69,10 +69,11 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function update(UpdateScheduleRequest $request, int $schedule): JsonResponse
+    public function update(UpdateScheduleRequest $request, int $schedule, ScheduleTodoService $scheduleTodoService): JsonResponse
     {
         $scheduleModel = $this->findOwnedSchedule($request, $schedule);
         $scheduleModel->update($request->validated());
+        $scheduleTodoService->syncLinkedTodo($scheduleModel);
 
         return response()->json([
             'message' => 'Schedule berhasil diperbarui.',

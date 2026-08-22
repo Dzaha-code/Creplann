@@ -18,9 +18,7 @@ class TodoController extends Controller
     {
         $query = $request->user()
             ->todos()
-            ->with('schedule')
-            ->orderBy('due_date')
-            ->orderBy('created_at');
+            ->with('schedule');
 
         $status = $request->string('filter', 'all')->toString();
 
@@ -30,6 +28,17 @@ class TodoController extends Controller
 
         if ($status === 'done') {
             $query->where('completed', true);
+        }
+
+        if ($status === 'done') {
+            $query
+                ->orderByDesc('completed_at')
+                ->orderByDesc('updated_at')
+                ->orderByDesc('id');
+        } else {
+            $query
+                ->orderBy('due_date')
+                ->orderBy('created_at');
         }
 
         if ($request->filled('week_date')) {
@@ -71,10 +80,13 @@ class TodoController extends Controller
             $validated['due_date'] = $schedule->date->toDateString();
         }
 
+        $isCompleted = (bool) ($validated['completed'] ?? false);
+
         $todo = $request->user()->todos()->create([
             'schedule_id' => $schedule?->id,
             'title' => $validated['title'],
-            'completed' => $validated['completed'] ?? false,
+            'completed' => $isCompleted,
+            'completed_at' => $isCompleted ? now() : null,
             'due_date' => $validated['due_date'] ?? null,
         ]);
 
@@ -119,8 +131,10 @@ class TodoController extends Controller
         $todoModel = $this->findOwnedTodo($request, $todo);
 
         if ($request->boolean('toggle') && count($request->validated()) === 0) {
+            $newCompleted = ! $todoModel->completed;
             $todoModel->update([
-                'completed' => ! $todoModel->completed,
+                'completed' => $newCompleted,
+                'completed_at' => $newCompleted ? now() : null,
             ]);
 
             if ($this->isPlannerApiRequest($request)) {
@@ -134,6 +148,18 @@ class TodoController extends Controller
         }
 
         $validated = $request->validated();
+
+        if (array_key_exists('completed', $validated)) {
+            $requestedCompleted = (bool) $validated['completed'];
+
+            // Cegah completed_at berubah kalau statusnya tidak berubah.
+            if ($requestedCompleted === (bool) $todoModel->completed) {
+                unset($validated['completed_at']);
+            } else {
+                $validated['completed_at'] = $requestedCompleted ? now() : null;
+            }
+        }
+
         $schedule = array_key_exists('schedule_id', $validated)
             ? $this->resolveOwnedSchedule($request, $validated['schedule_id'])
             : $todoModel->schedule;

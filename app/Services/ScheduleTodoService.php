@@ -32,4 +32,23 @@ class ScheduleTodoService
             'created' => $wasRecentlyCreated,
         ];
     }
+
+    public function syncLinkedTodo(Schedule $schedule): ?Todo
+    {
+        $todo = Todo::query()
+            ->where('user_id', $schedule->user_id)
+            ->where('schedule_id', $schedule->id)
+            ->first();
+
+        if (! $todo) {
+            return null;
+        }
+
+        $todo->update([
+            'title' => $schedule->title,
+            'due_date' => $schedule->date->toDateString(),
+        ]);
+
+        return $todo->fresh('schedule');
+    }
 }
