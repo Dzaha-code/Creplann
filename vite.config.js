@@ -22,6 +22,13 @@ export default defineConfig({
                 'resources/js/pages/todo.js',
                 'resources/css/pages/notes.css',
                 'resources/js/pages/notes.js',
+
+                // Halaman baru: Blog, Contact, Help
+                'resources/css/pages/blog.css',
+                'resources/css/pages/contact.css',
+                'resources/css/pages/help.css',
+                'resources/js/pages/contact.js',
+                'resources/js/pages/help.js',
             ],
             refresh: true,
         }),

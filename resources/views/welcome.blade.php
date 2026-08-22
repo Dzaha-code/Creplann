@@ -44,6 +44,8 @@
                 <li><a href="#features">Fitur</a></li>
                 <li><a href="#compare">Perbandingan</a></li>
                 <li><a href="#cara-kerja">Cara kerja</a></li>
+                <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                <li><a href="{{ route('help.index') }}">Bantuan</a></li>
             </ul>
 
             <div class="lp-nav-cta">
@@ -502,10 +504,10 @@
                     {{ config('app.name', 'CrePlann') }}
                 </div>
                 <ul class="footer-links" role="list">
-                    <li><a href="#">Fitur</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Bantuan</a></li>
-                    <li><a href="#">Kontak</a></li>
+                    <li><a href="#features">Fitur</a></li>
+                    <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                    <li><a href="{{ route('help.index') }}">Bantuan</a></li>
+                    <li><a href="{{ route('contact.index') }}">Kontak</a></li>
                 </ul>
                 <div class="footer-copy">&copy; {{ date('Y') }} {{ config('app.name', 'CrePlann') }}. Hak cipta dilindungi.</div>
             </div>

@@ -1,0 +1,454 @@
+/* ─── Help / Pusat Bantuan ───────────────────────────────────────
+   Prefix: hp- (help)
+   Menggunakan CSS variables dari app.css.
+──────────────────────────────────────────────────────────────── */
+
+/* ── Wrap ────────────────────────────────────────────────── */
+.hp-wrap {
+    width: min(100% - 56px, 1120px);
+    margin: 0 auto;
+    padding: 18px 0 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+}
+
+/* ── Page header ─────────────────────────────────────────── */
+.hp-page-header { padding: 4px 0 0; }
+
+.hp-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.hp-header-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 10px);
+    background: var(--board);
+    color: var(--coral);
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.hp-page-title {
+    margin: 0;
+    color: var(--ink);
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 2.2rem;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+.hp-page-sub {
+    margin: 5px 0 0;
+    color: var(--ink-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* ── Section title ───────────────────────────────────────── */
+.hp-section-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hp-section-title i {
+    color: var(--coral);
+    font-size: 1.3rem;
+}
+
+/* ── Guide grid ──────────────────────────────────────────── */
+.hp-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+/* ── Guide card ──────────────────────────────────────────── */
+.hp-guide-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--white, #fffdf8);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.hp-guide-card:hover {
+    border-color: var(--coral);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+/* Card head */
+.hp-guide-card-head {
+    padding: 22px 22px 18px;
+    border-bottom: 1px solid var(--line-light, #ece6df);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Ikon feature card */
+.hp-guide-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 10px);
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.hp-guide-icon--schedule {
+    background: rgba(93, 130, 180, 0.14);
+    color: var(--blue, #4d6478);
+}
+
+.hp-guide-icon--todo {
+    background: var(--sage-soft, rgba(92,122,99,0.15));
+    color: var(--sage, #5c7a63);
+}
+
+.hp-guide-icon--notes {
+    background: var(--coral-soft, rgba(217,143,43,0.14));
+    color: var(--coral);
+}
+
+.hp-guide-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+}
+
+.hp-guide-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 0;
+}
+
+/* Guide list */
+.hp-guide-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.hp-guide-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--line-light, #ece6df);
+    transition: background 0.15s ease;
+}
+
+.hp-guide-item:last-child {
+    border-bottom: none;
+}
+
+.hp-guide-item:hover {
+    background: var(--paper-soft, #e8e3d2);
+}
+
+.hp-guide-item-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper-soft, #e8e3d2);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.hp-guide-item strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+}
+
+.hp-guide-item p {
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* CTA di bawah tiap guide card */
+.hp-guide-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 22px;
+    background: var(--board);
+    color: var(--coral);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background 0.18s ease, gap 0.18s ease;
+    margin-top: auto;
+}
+
+.hp-guide-cta:hover {
+    background: #1a1e19;
+    gap: 12px;
+}
+
+/* ── FAQ ─────────────────────────────────────────────────── */
+.hp-faq-section {
+    /* no extra margin needed — .hp-wrap gap handles it */
+}
+
+.hp-faq-list {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--white, #fffdf8);
+    box-shadow: var(--shadow-sm);
+}
+
+.hp-faq-item {
+    border-bottom: 1px solid var(--line-light, #ece6df);
+}
+
+.hp-faq-item:last-child {
+    border-bottom: none;
+}
+
+/* Trigger button */
+.hp-faq-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--ink);
+    transition: background 0.15s ease;
+}
+
+.hp-faq-trigger:hover {
+    background: var(--paper-soft, #e8e3d2);
+}
+
+.hp-faq-trigger[aria-expanded="true"] {
+    background: var(--coral-soft, rgba(217,143,43,0.1));
+    color: var(--coral);
+}
+
+.hp-faq-chevron {
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: transform 0.28s var(--ease-smooth, ease);
+    color: var(--ink-soft);
+}
+
+.hp-faq-trigger[aria-expanded="true"] .hp-faq-chevron {
+    transform: rotate(180deg);
+    color: var(--coral);
+}
+
+/* Body / answer */
+.hp-faq-body {
+    padding: 0 22px 18px 22px;
+    animation: hp-faq-open 0.24s var(--ease-smooth, ease) both;
+}
+
+.hp-faq-body p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0;
+}
+
+.hp-faq-body strong {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+@keyframes hp-faq-open {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Contact strip ───────────────────────────────────────── */
+.hp-contact-strip {
+    background: var(--board);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hp-contact-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(241,238,225,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(241,238,225,0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+}
+
+.hp-contact-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hp-contact-icon {
+    font-size: 2.2rem;
+    color: var(--coral);
+    flex-shrink: 0;
+}
+
+.hp-contact-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hp-contact-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white, #fffdf8);
+    letter-spacing: -0.01em;
+}
+
+.hp-contact-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(241,238,225,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hp-contact-btn {
+    /* override nt-btn--solid untuk background gelap */
+    flex-shrink: 0;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: var(--board);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.hp-contact-btn:hover {
+    background: var(--coral-hover, #b97821);
+    color: var(--white, #fffdf8);
+    transform: translateY(-2px);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .hp-guide-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hp-wrap {
+        width: min(100% - 32px, 1120px);
+        gap: 40px;
+        padding-bottom: 60px;
+    }
+
+    .hp-guide-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hp-contact-strip {
+        padding: 22px 20px;
+    }
+
+    .hp-contact-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hp-contact-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hp-page-title {
+        font-size: 1.8rem;
+    }
+
+    .hp-faq-trigger {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+    }
+
+    .hp-faq-body {
+        padding: 0 16px 14px;
+    }
+}

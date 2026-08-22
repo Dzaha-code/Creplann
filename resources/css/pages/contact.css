@@ -1,0 +1,452 @@
+/* ─── Contact Page ───────────────────────────────────────────────
+   Prefix: ct- (contact)
+   Menggunakan CSS variables dari app.css.
+──────────────────────────────────────────────────────────────── */
+
+/* ── Wrap & Layout ───────────────────────────────────────── */
+.ct-wrap {
+    width: min(100% - 56px, 1120px);
+    margin: 0 auto;
+    padding: 18px 0 80px;
+}
+
+.ct-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 28px;
+}
+
+/* ── Page header ─────────────────────────────────────────── */
+.ct-page-header { padding: 4px 0 0; }
+
+.ct-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ct-header-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 10px);
+    background: var(--board);
+    color: var(--coral);
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.ct-page-title {
+    margin: 0;
+    color: var(--ink);
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 2.2rem;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+.ct-page-sub {
+    margin: 5px 0 0;
+    color: var(--ink-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.ct-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 90px;
+}
+
+.ct-info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--white, #fffdf8);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ct-info-card:hover {
+    border-color: var(--coral);
+    box-shadow: var(--shadow-sm);
+}
+
+.ct-info-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 10px);
+    background: var(--coral-soft, rgba(217,143,43,0.14));
+    color: var(--coral);
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.ct-info-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.64rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+}
+
+.ct-info-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.ct-link {
+    color: var(--coral);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: gap 0.18s ease, color 0.15s ease;
+}
+
+.ct-link:hover {
+    color: var(--coral-hover, #b97821);
+    gap: 8px;
+}
+
+/* Dekorasi ticket-stub sidebar */
+.ct-sidebar-deco {
+    margin-top: 6px;
+    padding: 18px 20px;
+    background: var(--board);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ct-sidebar-deco::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(241,238,225,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(241,238,225,0.05) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+}
+
+.ct-deco-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--coral);
+    letter-spacing: -0.01em;
+}
+
+.ct-deco-sub {
+    position: relative;
+    z-index: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(241,238,225,0.5);
+}
+
+/* ── Form card ───────────────────────────────────────────── */
+.ct-form-card {
+    background: var(--white, #fffdf8);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-sm);
+    /* Ticket-stub perforation top edge */
+    position: relative;
+}
+
+.ct-form-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20px;
+    right: 20px;
+    height: 12px;
+    background-image: radial-gradient(circle, var(--paper, #f1eee1) 3px, transparent 3.4px);
+    background-size: 18px 12px;
+    background-position: 9px 0;
+    background-repeat: repeat-x;
+}
+
+.ct-form-card-head {
+    margin-bottom: 26px;
+}
+
+.ct-form-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 6px;
+}
+
+.ct-form-lede {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.55;
+}
+
+/* ── Fields ──────────────────────────────────────────────── */
+.ct-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ct-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.ct-field:last-of-type {
+    margin-bottom: 0;
+}
+
+.ct-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+}
+
+.ct-required {
+    color: var(--coral);
+    margin-left: 2px;
+}
+
+.ct-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-md, 10px);
+    background: var(--white, #fffdf8);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    appearance: none;
+}
+
+.ct-input:focus {
+    outline: none;
+    border-color: var(--coral);
+    box-shadow: 0 0 0 4px var(--coral-soft, rgba(217,143,43,0.14));
+}
+
+.ct-textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+/* Estado error pada field */
+.ct-field.has-error .ct-input {
+    border-color: var(--danger, #ad3a2c);
+    box-shadow: 0 0 0 4px var(--danger-soft, rgba(173,58,44,0.1));
+}
+
+.ct-field-error {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--danger, #ad3a2c);
+    margin: 0;
+    min-height: 18px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ct-field-error:empty { display: none; }
+
+/* Global error banner */
+.ct-form-global-error {
+    padding: 12px 16px;
+    background: var(--danger-soft, rgba(173,58,44,0.1));
+    border: 1px solid rgba(173,58,44,0.25);
+    border-radius: var(--radius-md, 10px);
+    color: var(--danger, #ad3a2c);
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* ── Actions ─────────────────────────────────────────────── */
+.ct-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.ct-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: var(--radius-full, 9999px);
+    border: none;
+    background: var(--coral);
+    color: var(--board);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s var(--ease-spring, ease), box-shadow 0.18s ease;
+    min-height: 50px;
+}
+
+.ct-submit-btn:hover:not(:disabled) {
+    background: var(--coral-hover, #b97821);
+    color: var(--white, #fffdf8);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -10px var(--coral);
+}
+
+.ct-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ct-submit-btn.is-loading i {
+    animation: ct-spin 0.7s linear infinite;
+}
+
+@keyframes ct-spin {
+    to { transform: rotate(360deg); }
+}
+
+.ct-required-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-faint, #9a9c8b);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Toast ───────────────────────────────────────────────── */
+.ct-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    z-index: 2000;
+    transform: translateX(-50%) translateY(14px);
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: var(--board);
+    color: var(--white, #fffdf8);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.84rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s var(--ease-spring, ease);
+    box-shadow: var(--shadow-xl, 0 30px 70px rgba(32,36,31,0.2));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.ct-toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.ct-toast.is-success {
+    background: var(--sage, #5c7a63);
+}
+
+.ct-toast.is-error {
+    background: var(--danger, #ad3a2c);
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+    .ct-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .ct-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    .ct-sidebar-deco {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .ct-wrap {
+        width: min(100% - 32px, 1120px);
+        padding-bottom: 60px;
+    }
+
+    .ct-form-card {
+        padding: 22px 18px;
+    }
+
+    .ct-field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .ct-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .ct-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ct-submit-btn {
+        justify-content: center;
+    }
+}

@@ -1699,6 +1699,72 @@ body > .wrap.page-header {
     }
 }
 
+/* ─── App Footer ─────────────────────────────────────────── */
+.app-footer {
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+    padding: 20px 0;
+    background: var(--white, #fffdf8);
+}
+
+.app-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.app-footer-brand {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+
+.app-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.app-footer-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.app-footer-link:hover {
+    background: var(--coral-soft, rgba(217,143,43,0.14));
+    color: var(--coral);
+}
+
+.app-footer-copy {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-faint, #9a9c8b);
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+    .app-footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+}
+
 /* ─── Utility Animations ─────────────────────────────────── */
 .animate-float {
     animation: float 6s ease-in-out infinite;

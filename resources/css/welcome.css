@@ -1543,3 +1543,27 @@
         scroll-behavior: auto;
     }
 }
+
+
+    /* ═══════════════════════════════════════════════
+       PUBLIC LAYOUT (Blog, Contact, Help)
+       Halaman publik memakai nav & footer landing page
+       melalui layouts/public.blade.php
+    ═══════════════════════════════════════════════ */
+
+    /* Nav active state untuk link yang sedang aktif */
+    .lp-nav-links a.pub-nav-active {
+        background: var(--coral-soft);
+        color: var(--coral);
+    }
+
+    /* Body & main halaman publik — memberi jarak dari nav */
+    .pub-main {
+        padding-bottom: 40px;
+    }
+
+    /* Page header pada halaman publik */
+    .pub-page-header {
+        padding: clamp(32px, 5vw, 52px) 0 16px;
+        margin-bottom: 4px;
+    }
