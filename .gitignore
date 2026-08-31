@@ -14,8 +14,9 @@
 /.zed
 /auth.json
 /node_modules
+# Build output — dikecualikan dari git untuk development lokal
+# Saat deploy ke Railway, Nixpacks akan build ulang via 'npm run build'
 /public/build
-/public/fonts-manifest.dev.json
 /public/hot
 /public/storage
 /storage/*.key
