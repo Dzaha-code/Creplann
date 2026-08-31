@@ -77,7 +77,7 @@
            @if (request()->routeIs('profile*')) aria-current="page" @endif
            title="{{ auth()->user()->name }}">
             @if (auth()->user()->avatar)
-                <img src="{{ auth()->user()->avatar }}" alt="" class="nav-avatar">
+                <img src="{{ auth()->user()->avatarUrl() }}" alt="" class="nav-avatar">
             @else
                 <span class="nav-avatar nav-avatar--initial" aria-hidden="true">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}

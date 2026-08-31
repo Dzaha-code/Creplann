@@ -5,30 +5,32 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                // App (auth) — dimuat di layout aplikasi
+                // Core app
                 'resources/css/app.css',
                 'resources/js/app.js',
 
-                // Landing page (welcome)
+                // Landing page
                 'resources/css/welcome.css',
                 'resources/js/welcome.js',
 
-                // CSS & JS spesifik per halaman (di-extract dari inline <style>/<script>)
+                // Per-page CSS (hanya dimuat di halaman yang butuh via @push('head'))
                 'resources/css/pages/dashboard.css',
-                'resources/js/pages/dashboard.js',
                 'resources/css/pages/schedule.css',
-                'resources/js/pages/schedule.js',
                 'resources/css/pages/todo.css',
-                'resources/js/pages/todo.js',
                 'resources/css/pages/notes.css',
-                'resources/js/pages/notes.js',
-
-                // Halaman baru: Blog, Contact, Help
                 'resources/css/pages/blog.css',
                 'resources/css/pages/contact.css',
                 'resources/css/pages/help.css',
+                'resources/css/pages/profile.css',
+
+                // Per-page JS
+                'resources/js/pages/dashboard.js',
+                'resources/js/pages/schedule.js',
+                'resources/js/pages/todo.js',
+                'resources/js/pages/notes.js',
                 'resources/js/pages/contact.js',
                 'resources/js/pages/help.js',
+                'resources/js/pages/profile.js',
             ],
             refresh: true,
         }),
@@ -41,8 +43,7 @@ export default defineConfig({
         chunkSizeWarningLimit: 250,
         rollupOptions: {
             output: {
-                // Code splitting: pisahkan vendor (Alpine) dari kode aplikasi agar
-                // cache browser tetap valid saat kode aplikasi berubah.
+                // Pisahkan Alpine dari kode app agar cache browser tetap valid
                 manualChunks(id) {
                     if (id.includes('node_modules/alpinejs')) {
                         return 'alpine';
@@ -51,7 +52,15 @@ export default defineConfig({
                         return 'vendor';
                     }
                 },
+                // Nama file stabil untuk caching lebih lama
+                entryFileNames:  'assets/[name]-[hash].js',
+                chunkFileNames:  'assets/[name]-[hash].js',
+                assetFileNames:  'assets/[name]-[hash][extname]',
             },
         },
+    },
+    // Optimalkan dependency pre-bundling
+    optimizeDeps: {
+        include: ['alpinejs'],
     },
 });

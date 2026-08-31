@@ -46,6 +46,27 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * Kembalikan URL avatar yang siap dipakai di tag <img src>.
+     * - Google OAuth avatar → URL eksternal, langsung dikembalikan
+     * - Upload lokal (path relatif) → dikonversi ke URL storage
+     * - Null → null (caller bertanggung jawab menampilkan fallback)
+     */
+    public function avatarUrl(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
+
+        // Sudah berupa URL (Google OAuth atau URL absolut lama)
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        // Path relatif hasil upload lokal
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar);
+    }
+
     public function schedules(): HasMany
     {
         return $this->hasMany(Schedule::class);

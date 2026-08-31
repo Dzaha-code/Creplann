@@ -1,62 +1,69 @@
-  <section class="profile-section">
-    <header class="section-head">
-        <div>
-            <div class="kicker">{{ __('Profile Information') }}</div>
-            <h2 class="section-title">{{ __('Profile Details') }}</h2>
-            <p class="lede">{{ __("Update your account's profile information and email address.") }}</p>
-        </div>
-    </header>
+<form method="post" action="{{ route('profile.update') }}" class="pf-form">
+    @csrf
+    @method('patch')
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
+    {{-- avatar hidden (tidak diubah di form ini) --}}
+    <input type="hidden" name="avatar" value="">
 
-    <form method="post" action="{{ route('profile.update') }}" class="profile-form">
-        @csrf
-        @method('patch')
+    <div class="pf-field {{ $errors->has('name') ? 'has-error' : '' }}">
+        <label class="pf-label" for="name">Nama Lengkap</label>
+        <input id="name"
+               name="name"
+               type="text"
+               class="pf-input"
+               value="{{ old('name', $user->name) }}"
+               required
+               autofocus
+               autocomplete="name"
+               maxlength="255">
+        @error('name')
+            <p class="pf-field-error" role="alert">{{ $message }}</p>
+        @enderror
+    </div>
 
-        <div class="field">
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
+    <div class="pf-field {{ $errors->has('email') ? 'has-error' : '' }}">
+        <label class="pf-label" for="email">Alamat Email</label>
+        <input id="email"
+               name="email"
+               type="email"
+               class="pf-input"
+               value="{{ old('email', $user->email) }}"
+               required
+               autocomplete="username"
+               maxlength="255">
+        @error('email')
+            <p class="pf-field-error" role="alert">{{ $message }}</p>
+        @enderror
 
-        <div class="field">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
+        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+            <div class="pf-verify-notice">
+                <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                Email belum diverifikasi.
+                <form id="send-verification" method="post" action="{{ route('verification.send') }}" style="display:inline">
+                    @csrf
+                    <button type="submit" class="pf-link-btn">Kirim ulang verifikasi</button>
+                </form>
+            </div>
+            @if (session('status') === 'verification-link-sent')
+                <p class="pf-success-notice" role="status">
+                    <i class="ti ti-circle-check" aria-hidden="true"></i>
+                    Link verifikasi telah dikirim ke email Anda.
+                </p>
             @endif
-        </div>
+        @endif
+    </div>
 
-        <div class="flex flex-wrap gap-4 items-center">
-            <x-primary-button class="btn btn-solid">{{ __('Save') }}</x-primary-button>
+    <div class="pf-form-actions">
+        <button type="submit" class="nt-btn nt-btn--solid">
+            <i class="ti ti-device-floppy" aria-hidden="true"></i>
+            Simpan Perubahan
+        </button>
 
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
-            @endif
-        </div>
-    </form>
-</section>
+        @if (session('status') === 'profile-updated')
+            <span class="pf-saved-notice" role="status">
+                <i class="ti ti-circle-check" aria-hidden="true"></i>
+                Tersimpan!
+            </span>
+        @endif
+    </div>
+</form>
